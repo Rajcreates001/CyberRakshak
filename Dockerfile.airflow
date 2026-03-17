@@ -1,0 +1,27 @@
+FROM apache/airflow:2.9.3-python3.10
+
+USER root
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends openjdk-17-jre-headless procps graphviz curl && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+ENV AIRFLOW_HOME=/opt/airflow
+ENV SPARK_HOME=/opt/spark
+
+# Add Delta Lake jars used by spark-submit commands in DAGs and in ai_engine Spark sessions.
+RUN mkdir -p /opt/airflow/jars && \
+    curl -fsSL https://repo1.maven.org/maven2/io/delta/delta-spark_2.12/3.2.0/delta-spark_2.12-3.2.0.jar -o /opt/airflow/jars/delta-spark_2.12-3.2.0.jar && \
+    curl -fsSL https://repo1.maven.org/maven2/io/delta/delta-storage/3.2.0/delta-storage-3.2.0.jar -o /opt/airflow/jars/delta-storage-3.2.0.jar && \
+    curl -fsSL https://repo1.maven.org/maven2/org/antlr/antlr4-runtime/4.9.3/antlr4-runtime-4.9.3.jar -o /opt/airflow/jars/antlr4-runtime-4.9.3.jar && \
+    chown -R airflow:root /opt/airflow/jars
+
+# Install Spark
+RUN curl -fsSL https://archive.apache.org/dist/spark/spark-3.5.1/spark-3.5.1-bin-hadoop3.tgz | tar -xz -C /opt && \
+    mv /opt/spark-3.5.1-bin-hadoop3 $SPARK_HOME && \
+    chown -R airflow:root $SPARK_HOME
+
+USER airflow
+COPY requirements.txt /requirements.txt
+RUN pip install --no-cache-dir -r /requirements.txt

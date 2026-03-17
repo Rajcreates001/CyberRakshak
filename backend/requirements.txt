@@ -1,0 +1,16 @@
+fastapi==0.115.0
+uvicorn==0.30.6
+websockets==12.0
+python-multipart==0.0.12
+pandas==2.2.3
+pyarrow==17.0.0
+deltalake==0.20.2
+requests==2.32.3
+reportlab==4.2.2
+numpy==2.1.1
+scikit-learn==1.5.2
+xgboost==2.1.1
+pyspark==3.5.1
+delta-spark==3.2.0
+kafka-python==2.0.2
+psycopg2-binary==2.9.10

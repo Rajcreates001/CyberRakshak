@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: cyberrakshak-backend
+    env: docker
+    dockerfilePath: backend/Dockerfile.render
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: CYBER_DATA_DIR
+        value: data
+      - key: DATASETS_DIR
+        value: /app/datasets
+      - key: AI_ENGINE_BASE_URL
+        sync: false
+      - key: AIRFLOW_BASE_URL
+        value: http://localhost:8080
+      - key: KAFKA_BOOTSTRAP_SERVERS
+        value: demo-local:9092
+      - key: SUPABASE_DB_URL
+        sync: false
+
+  - type: web
+    name: cyberrakshak-ai-engine
+    env: docker
+    dockerfilePath: ai_engine/Dockerfile.render
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeploy: true

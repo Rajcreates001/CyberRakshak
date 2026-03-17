@@ -1,0 +1,8 @@
+fastapi==0.115.0
+uvicorn==0.30.6
+pandas==2.2.3
+numpy==2.1.1
+scikit-learn==1.5.2
+xgboost==2.1.1
+pyspark==3.5.1
+delta-spark==3.2.0
